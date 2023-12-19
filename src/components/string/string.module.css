@@ -1,0 +1,15 @@
+.setupBox {
+    margin: 0 auto;
+    display: flex;
+    max-width: 522px;
+}
+
+.vizBox {
+
+    display: flex;
+    padding: 0;
+
+    list-style: none;
+    justify-content: center;
+    gap: 16px;
+}
