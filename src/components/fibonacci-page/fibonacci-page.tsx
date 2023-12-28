@@ -21,7 +21,6 @@ export const FibonacciPage: React.FC = () => {
     } else {
       setValidation(false);
     }
-    //console.log(inputNumber);
   }, [inputNumber]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +43,7 @@ export const FibonacciPage: React.FC = () => {
       }
     } finally {
       SetInProgress(false);
+      setInput("");
     }
   };
 
@@ -68,7 +68,7 @@ export const FibonacciPage: React.FC = () => {
           extraClass="ml-6"
           onClick={handleStartAlgoritm}
           isLoader={inProgress}
-          disabled={!validation}
+          disabled={!validation || input === ""}
         />
       </div>
       {fibNumbers && (
