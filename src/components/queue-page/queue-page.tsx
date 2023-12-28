@@ -106,7 +106,7 @@ export const QueuePage: React.FC = () => {
           text="Удалить"
           extraClass=""
           onClick={handleRemoveBtn}
-          disabled={!checkForRemoval()}
+          disabled={!checkForRemoval() || loadingAdd}
           isLoader={loadingRemove}
         />
         <div className={`${styles.clearBtn}`}>
@@ -114,7 +114,7 @@ export const QueuePage: React.FC = () => {
             text="Очистить"
             extraClass=""
             onClick={handleClearBtn}
-            disabled={!queueItems.length}
+            disabled={!queueItems.length || loadingAdd || loadingRemove}
           />
         </div>
       </div>

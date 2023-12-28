@@ -86,7 +86,7 @@ export const StackPage: React.FC = () => {
           text="Удалить"
           extraClass=""
           onClick={handleRemoveBtn}
-          disabled={!stackItems.length}
+          disabled={!stackItems.length || loadingAdd}
           isLoader={loadingRemove}
         />
         <div className={`${styles.clearBtn}`}>
@@ -94,7 +94,7 @@ export const StackPage: React.FC = () => {
             text="Очистить"
             extraClass=""
             onClick={handleClearBtn}
-            disabled={!stackItems.length}
+            disabled={!stackItems.length || loadingAdd || loadingRemove}
           />
         </div>
       </div>

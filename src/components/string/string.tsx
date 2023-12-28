@@ -75,6 +75,7 @@ export const StringComponent: React.FC = () => {
       }
     } finally {
       SetInProgress(false);
+      SetInput("");
     }
   };
 
@@ -92,6 +93,7 @@ export const StringComponent: React.FC = () => {
           extraClass="ml-6"
           onClick={handleStartAlgoritm}
           isLoader={inProgress}
+          disabled={input === "" ? true : false}
         />
       </div>
 

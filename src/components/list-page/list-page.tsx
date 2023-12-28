@@ -12,7 +12,12 @@ import { ElementStates } from "../../types/element-states";
 
 interface IInputState {
   value: string;
-  index: number | null;
+  index: number | string | null;
+}
+
+interface IInput {
+  value: string;
+  index: string;
 }
 
 interface IMovingEl extends IInputState {
@@ -32,7 +37,7 @@ export enum PositionSmCircle {
 const initialState: string[] = ["0", "34", "8", "1"];
 
 export const ListPage: React.FC = () => {
-  const [input, setInput] = useState<IInputState>({ value: "", index: null });
+  const [input, setInput] = useState<IInput>({ value: "", index: "" });
   const [loading, setLoading] = useState({
     removingFromHead: false,
     removingFromTail: false,
@@ -87,7 +92,7 @@ export const ListPage: React.FC = () => {
       ...prevLoading,
       addingToHead: false,
     }));
-    setInput({ value: "", index: null });
+    setInput({ value: "", index: "" });
   };
 
   const addToTail = async () => {
@@ -113,7 +118,7 @@ export const ListPage: React.FC = () => {
       ...prevLoading,
       addingToTail: false,
     }));
-    setInput({ value: "", index: null });
+    setInput({ value: "", index: "" });
   };
 
   const removeFromTail = async () => {
@@ -137,7 +142,7 @@ export const ListPage: React.FC = () => {
       ...prevLoading,
       removingFromTail: false,
     }));
-    setInput({ value: "", index: null });
+    setInput({ value: "", index: "" });
   };
 
   const removeFromHead = async () => {
@@ -160,64 +165,67 @@ export const ListPage: React.FC = () => {
       ...prevLoading,
       removingFromHead: false,
     }));
-    setInput({ value: "", index: null });
+    setInput({ value: "", index: "" });
   };
 
   // ДОБАВИТЬ ПО ИНДЕКСУ
 
   const addByIndex = async () => {
     if (input.value && input.index != null) {
+      const inputIndex = parseInt(input.index);
       setLoading((prevLoading) => ({
         ...prevLoading,
         addingByIndex: true,
       }));
       setPositionSmallCircle(PositionSmCircle.top);
-      await moveCircles(input.index);
+      await moveCircles(inputIndex);
       //
-      linkedList.insertAt(input.value, input.index);
-      changeNodeState(input.index, ElementStates.Modified);
+      linkedList.insertAt(input.value, inputIndex);
+      changeNodeState(inputIndex, ElementStates.Modified);
       setList([...linkedList.getElements()]);
       await delay(SHORT_DELAY_IN_MS);
-      //changeNodeState(input.index, ElementStates.Default);
-      resetNodesState(input.index);
+      changeNodeState(inputIndex + 1, ElementStates.Default);
+      resetNodesState(inputIndex);
       setList([...linkedList.getElements()]);
       setLoading((prevLoading) => ({
         ...prevLoading,
         addingByIndex: false,
       }));
-      setInput({ value: "", index: null });
+      setInput({ value: "", index: "" });
     }
   };
 
   // УДАЛИТЬ ПО ИНДЕКСУ
   const removeByIndex = async () => {
-    if (input.index == null) return;
-    setLoading((prevLoading) => ({
-      ...prevLoading,
-      removingByIndex: true,
-    }));
-    setPositionSmallCircle(PositionSmCircle.bottom);
-    for (let i = 0; i < input.index; i++) {
-      changeNodeState(i, ElementStates.Changing);
-      await delay(SHORT_DELAY_IN_MS);
-    }
-    setMovingEl({
-      value: list[input.index].value,
-      index: input.index,
-      state: ElementStates.Changing,
-    });
-    changeNodeState(input.index, ElementStates.Default, "");
+    if (input.index !== null) {
+      const inputIndex = parseInt(input.index);
+      setLoading((prevLoading) => ({
+        ...prevLoading,
+        removingByIndex: true,
+      }));
+      setPositionSmallCircle(PositionSmCircle.bottom);
+      for (let i = 0; i < inputIndex; i++) {
+        changeNodeState(i, ElementStates.Changing);
+        await delay(SHORT_DELAY_IN_MS);
+      }
+      setMovingEl({
+        value: list[inputIndex].value,
+        index: inputIndex,
+        state: ElementStates.Changing,
+      });
+      changeNodeState(inputIndex, ElementStates.Default, "");
 
-    await delay(SHORT_DELAY_IN_MS);
-    linkedList.deleteAtIndex(input.index);
-    setList([...linkedList.getElements()]);
-    setMovingEl({ value: "", index: null, state: ElementStates.Changing });
-    resetNodesState(input.index - 1);
-    setLoading((prevLoading) => ({
-      ...prevLoading,
-      removingByIndex: false,
-    }));
-    setInput({ value: "", index: null });
+      await delay(SHORT_DELAY_IN_MS);
+      linkedList.deleteAtIndex(inputIndex);
+      setList([...linkedList.getElements()]);
+      setMovingEl({ value: "", index: null, state: ElementStates.Changing });
+      resetNodesState(inputIndex - 1);
+      setLoading((prevLoading) => ({
+        ...prevLoading,
+        removingByIndex: false,
+      }));
+      setInput({ value: "", index: "" });
+    }
   };
 
   // ПЕРЕДВИЖЕНИЕ МАЛЕНЬКОГО КРУЖКА
@@ -272,12 +280,21 @@ export const ListPage: React.FC = () => {
         value: e.target.value,
       }));
     } else if (type === "index") {
+      // console.log(e.target.value);
+      // if (e.target.value) {
+      //   setInput((prevInput) => ({
+      //     ...prevInput,
+      //     index: parseInt(e.target.value),
+      //   }));
+      // }
       setInput((prevInput) => ({
         ...prevInput,
-        index: parseInt(e.target.value),
+        index: e.target.value,
       }));
     }
   };
+
+  //console.log(input.index);
 
   const isTail = (index: number) => {
     return index === linkedList.getTailIndex() &&
@@ -293,6 +310,10 @@ export const ListPage: React.FC = () => {
       !loading.addingByIndex
       ? "head"
       : "";
+  };
+
+  const anyLoading = () => {
+    return Object.values(loading).some((value) => value === true);
   };
 
   return (
@@ -313,23 +334,25 @@ export const ListPage: React.FC = () => {
             text="Добавить в head"
             onClick={addToHead}
             isLoader={loading.addingToHead}
-            disabled={!input.value ? true : false}
+            disabled={input.value && !anyLoading() ? false : true}
           />
           <Button
             text="Добавить в tail"
             onClick={addToTail}
             isLoader={loading.addingToTail}
-            disabled={!input.value ? true : false}
+            disabled={input.value && !anyLoading() ? false : true}
           />
           <Button
             text="Удалить из head"
             onClick={removeFromHead}
             isLoader={loading.removingFromHead}
+            disabled={anyLoading() ? true : false}
           />
           <Button
             text="Удалить из tail"
             onClick={removeFromTail}
             isLoader={loading.removingFromTail}
+            disabled={anyLoading() ? true : false}
           />
         </div>
         <div className={styles.setupBar}>
@@ -339,8 +362,10 @@ export const ListPage: React.FC = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleInput("index", e)
               }
-              value={input.index ? input.index : ""}
+              type="number"
+              value={input.index}
               maxLength={1}
+              min={0}
             />
           </div>
           <Button
@@ -348,14 +373,28 @@ export const ListPage: React.FC = () => {
             extraClass={styles.flexButton}
             onClick={addByIndex}
             isLoader={loading.addingByIndex}
-            disabled={input.value && input.index ? false : true}
+            disabled={
+              input.value &&
+              input.index &&
+              parseInt(input.index) < list.length &&
+              !anyLoading()
+                ? false
+                : true
+            }
           />
           <Button
             text="Удалить по индексу"
             extraClass={styles.flexButton}
             onClick={removeByIndex}
             isLoader={loading.removingByIndex}
-            disabled={input.index ? false : true}
+            disabled={
+              input.index &&
+              parseInt(input.index) < list.length &&
+              parseInt(input.index) >= 0 &&
+              !anyLoading()
+                ? false
+                : true
+            }
           />
         </div>
       </div>
