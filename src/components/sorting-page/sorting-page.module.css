@@ -1,0 +1,31 @@
+.setupBox {
+    display: flex;
+    max-width: 980px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.radioButtons {
+    display: flex;
+    gap: 40px;
+}
+
+.directionButtons {
+    margin-left: 52px;
+    display: flex;
+    gap: 12px;
+}
+
+.arrayGenerationButton {
+    margin-left: 80px;
+}
+
+.vizBox {
+    padding: 0;
+    margin: 48px auto 0px;
+    align-items: flex-end;
+    justify-content: center;
+    list-style: none;
+    column-gap: 10px;
+    display: flex;
+}

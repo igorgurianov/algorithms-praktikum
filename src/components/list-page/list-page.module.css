@@ -1,0 +1,53 @@
+.setupBox {
+    margin: 0 auto;
+    max-width: 952px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.setupBar {
+    display: flex;
+    gap: 12px;
+}
+
+.input {
+    width: 204px;
+}
+
+.flexButton {
+    flex: 1;
+}
+
+.vizBox {
+    padding: 0;
+    margin: 48px auto 0px;
+    align-items: flex-end;
+    justify-content: center;
+    list-style: none;
+    column-gap: 16px;
+    display: flex;
+}
+
+.lgCircleBox {
+    margin-top: 8px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.circleBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.smCircleItem {
+    height: 56px;
+    margin-left: 12px;
+}
+
+.smCircleItemBottom {
+    margin-top: 35px;
+    height: 56px;
+    margin-left: 12px;
+}

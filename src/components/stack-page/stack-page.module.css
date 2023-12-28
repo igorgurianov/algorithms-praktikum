@@ -1,0 +1,25 @@
+.setupBox {
+    margin: 0 auto;
+    max-width: 830px;
+    display: flex;
+    gap: 12px;
+}
+
+.input {
+    width: 100%;
+    max-width: 377px;
+}
+
+.clearBtn {
+    margin-left: auto;
+}
+
+.vizBox {
+    padding: 0;
+    margin: 48px auto 0px;
+    align-items: flex-end;
+    justify-content: center;
+    list-style: none;
+    column-gap: 10px;
+    display: flex;
+}

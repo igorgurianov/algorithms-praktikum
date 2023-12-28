@@ -6,6 +6,7 @@ import styles from "./string.module.css";
 import { Circle } from "../ui/circle/circle";
 import { TStringElement } from "../../types/string";
 import { ElementStates } from "../../types/element-states";
+import { DELAY_IN_MS } from "../../constants/delays";
 
 export const StringComponent: React.FC = () => {
   const [input, SetInput] = useState("");
@@ -25,10 +26,8 @@ export const StringComponent: React.FC = () => {
   };
 
   const handleStartAlgoritm = () => {
-    SetInProgress(true);
     const inputArray = splitInitialString(input);
     algoritm(inputArray);
-    SetInProgress(false);
   };
 
   const swap = (
@@ -46,31 +45,36 @@ export const StringComponent: React.FC = () => {
   };
 
   const algoritm = async (arr: TStringElement[]) => {
+    SetInProgress(true);
     SetInputArray(arr);
-    const middle = Math.floor(arr.length / 2);
+    try {
+      const middle = Math.floor(arr.length / 2);
 
-    let j = arr.length - 1;
-    for (let i = 0; i <= middle; i++) {
-      if (arr.length % 2 === 0 && i === middle) {
-        arr[i].state = ElementStates.Modified;
-        return;
-      }
+      let j = arr.length - 1;
+      for (let i = 0; i <= middle; i++) {
+        if (arr.length % 2 === 0 && i === middle) {
+          arr[i].state = ElementStates.Modified;
+          return;
+        }
 
-      if (i === j) {
-        arr[i].state = ElementStates.Modified;
+        if (i === j) {
+          arr[i].state = ElementStates.Modified;
+          SetInputArray([...arr]);
+          return;
+        }
+        arr[i].state = ElementStates.Changing;
+        arr[j].state = ElementStates.Changing;
         SetInputArray([...arr]);
-        return;
-      }
-      arr[i].state = ElementStates.Changing;
-      arr[j].state = ElementStates.Changing;
-      SetInputArray([...arr]);
-      await delay();
-      swap(arr, i, j);
-      arr[i].state = ElementStates.Modified;
-      arr[j].state = ElementStates.Modified;
+        await delay();
+        swap(arr, i, j);
+        arr[i].state = ElementStates.Modified;
+        arr[j].state = ElementStates.Modified;
 
-      SetInputArray([...arr]);
-      j--;
+        SetInputArray([...arr]);
+        j--;
+      }
+    } finally {
+      SetInProgress(false);
     }
   };
 
