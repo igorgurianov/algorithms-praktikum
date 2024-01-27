@@ -32,8 +32,6 @@ export const QueuePage: React.FC = () => {
     setqueueItems(queue.getContainer());
   }, [queue]);
 
-  console.log(queueItems);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
@@ -93,6 +91,7 @@ export const QueuePage: React.FC = () => {
             type="text"
             value={input}
             onChange={handleInputChange}
+            data-testid="input"
           />
         </div>
         <Button
@@ -101,6 +100,7 @@ export const QueuePage: React.FC = () => {
           onClick={handleAddBtn}
           disabled={!Boolean(input) || queueItems[6]?.value !== ""}
           isLoader={loadingAdd}
+          data-testid="add-button"
         />
         <Button
           text="Удалить"
@@ -108,6 +108,7 @@ export const QueuePage: React.FC = () => {
           onClick={handleRemoveBtn}
           disabled={!checkForRemoval() || loadingAdd}
           isLoader={loadingRemove}
+          data-testid="delete-button"
         />
         <div className={`${styles.clearBtn}`}>
           <Button
@@ -115,6 +116,7 @@ export const QueuePage: React.FC = () => {
             extraClass=""
             onClick={handleClearBtn}
             disabled={!queueItems.length || loadingAdd || loadingRemove}
+            data-testid="clear-button"
           />
         </div>
       </div>
@@ -124,6 +126,7 @@ export const QueuePage: React.FC = () => {
             return (
               <li key={index}>
                 <Circle
+                  data-testid="circle-element"
                   state={item?.state}
                   letter={item?.value}
                   head={

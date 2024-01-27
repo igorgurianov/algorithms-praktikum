@@ -62,6 +62,7 @@ export const FibonacciPage: React.FC = () => {
           onChange={handleInputChange}
           step="1"
           min={1}
+          data-testid="input"
         />
         <Button
           text="Рассчитать"
@@ -69,17 +70,23 @@ export const FibonacciPage: React.FC = () => {
           onClick={handleStartAlgoritm}
           isLoader={inProgress}
           disabled={!validation || input === ""}
+          data-testid="button"
         />
       </div>
       {fibNumbers && (
         <ul
           className={`${styles.vizBox}`}
           style={fibNumbers.length > 10 ? { justifyContent: "flex-start" } : {}}
+          data-testid="circles-container"
         >
           {fibNumbers.map((item, index) => {
             return (
               <li key={index}>
-                <Circle letter={item.toString()} index={index} />
+                <Circle
+                  letter={item.toString()}
+                  index={index}
+                  data-testid="circle-item"
+                />
               </li>
             );
           })}

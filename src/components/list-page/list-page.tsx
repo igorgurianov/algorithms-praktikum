@@ -328,6 +328,7 @@ export const ListPage: React.FC = () => {
               }
               value={input.value}
               maxLength={4}
+              data-testid="input-number"
             />
           </div>
           <Button
@@ -335,24 +336,28 @@ export const ListPage: React.FC = () => {
             onClick={addToHead}
             isLoader={loading.addingToHead}
             disabled={input.value && !anyLoading() ? false : true}
+            data-testid="add-to-head"
           />
           <Button
             text="Добавить в tail"
             onClick={addToTail}
             isLoader={loading.addingToTail}
             disabled={input.value && !anyLoading() ? false : true}
+            data-testid="add-to-tail"
           />
           <Button
             text="Удалить из head"
             onClick={removeFromHead}
             isLoader={loading.removingFromHead}
             disabled={anyLoading() ? true : false}
+            data-testid="remove-from-head"
           />
           <Button
             text="Удалить из tail"
             onClick={removeFromTail}
             isLoader={loading.removingFromTail}
             disabled={anyLoading() ? true : false}
+            data-testid="remove-from-tail"
           />
         </div>
         <div className={styles.setupBar}>
@@ -366,6 +371,7 @@ export const ListPage: React.FC = () => {
               value={input.index}
               maxLength={1}
               min={0}
+              data-testid="input-index"
             />
           </div>
           <Button
@@ -381,6 +387,7 @@ export const ListPage: React.FC = () => {
                 ? false
                 : true
             }
+            data-testid="add-by-index"
           />
           <Button
             text="Удалить по индексу"
@@ -395,11 +402,12 @@ export const ListPage: React.FC = () => {
                 ? false
                 : true
             }
+            data-testid="remove-by-index"
           />
         </div>
       </div>
       {list && (
-        <ul className={`${styles.vizBox}`}>
+        <ul className={`${styles.vizBox}`} data-testid="circles-box">
           {list.map((li, index) => {
             return (
               <li key={index}>
@@ -421,6 +429,7 @@ export const ListPage: React.FC = () => {
                       tail={isTail(index)}
                       head={isHead(index)}
                       state={li.state}
+                      data-testid="circle-element"
                     />
                     {index !== list.length - 1 ? <ArrowIcon /> : ""}
                   </div>

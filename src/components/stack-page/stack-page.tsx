@@ -73,6 +73,7 @@ export const StackPage: React.FC = () => {
             type="text"
             value={input}
             onChange={handleInputChange}
+            data-testid="input"
           />
         </div>
         <Button
@@ -81,6 +82,7 @@ export const StackPage: React.FC = () => {
           onClick={handleAddBtn}
           disabled={!Boolean(input)}
           isLoader={loadingAdd}
+          data-testid="add-button"
         />
         <Button
           text="Удалить"
@@ -88,6 +90,7 @@ export const StackPage: React.FC = () => {
           onClick={handleRemoveBtn}
           disabled={!stackItems.length || loadingAdd}
           isLoader={loadingRemove}
+          data-testid="remove-button"
         />
         <div className={`${styles.clearBtn}`}>
           <Button
@@ -95,11 +98,12 @@ export const StackPage: React.FC = () => {
             extraClass=""
             onClick={handleClearBtn}
             disabled={!stackItems.length || loadingAdd || loadingRemove}
+            data-testid="clear-button"
           />
         </div>
       </div>
       {stackItems && (
-        <ul className={styles.vizBox}>
+        <ul className={styles.vizBox} data-testid="circles-container">
           {stackItems.map((item, index) => {
             return (
               <li key={index}>
@@ -108,6 +112,7 @@ export const StackPage: React.FC = () => {
                   letter={item.value}
                   head={index === stack.getTop() ? "top" : ""}
                   index={index}
+                  data-testid="circle-element"
                 />
               </li>
             );
