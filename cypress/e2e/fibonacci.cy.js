@@ -1,17 +1,26 @@
+import {
+  btnSelector,
+  inputSelector,
+} from "../../src/constants/testing-selectors";
+
 describe("FIBONACCI TEST", () => {
+  beforeEach(() => {
+    cy.visit("fibonacci");
+    cy.get(btnSelector).as("button");
+    cy.get(inputSelector).as("input");
+  });
+
   it("button disabled", () => {
-    cy.visit("http://localhost:3000/fibonacci");
-    cy.get('[data-testid="button"]').should("be.disabled");
-    cy.get('[data-testid="input"]').type("6");
-    cy.get('[data-testid="button"]').should("not.be.disabled");
-    cy.get('[data-testid="input"]').clear();
-    cy.get('[data-testid="button"]').should("be.disabled");
+    cy.get("@button").should("be.disabled");
+    cy.get("@input").type("6");
+    cy.get("@button").should("not.be.disabled");
+    cy.get("@input").clear();
+    cy.get("@button").should("be.disabled");
   });
 
   it("numbers generated correctly", () => {
-    cy.visit("http://localhost:3000/fibonacci");
-    cy.get('[data-testid="input"]').type(3);
-    cy.get('[data-testid="button"]').click();
+    cy.get("@input").type(3);
+    cy.get("@button").click();
 
     cy.get('[data-testid="circles-container"] li').should("have.length", 4);
 

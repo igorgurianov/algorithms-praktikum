@@ -1,45 +1,60 @@
+import {
+  defaultBorder,
+  changingBorder,
+  circleStylesSelector,
+  addButton,
+  inputSelector,
+  circleElementSelector,
+  circleLetterSelector,
+  deleteButton,
+  clearButton,
+} from "../../src/constants/testing-selectors";
+
 describe("QUEUE TEST", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/queue");
+    cy.visit("queue");
+    cy.get(addButton).as("add-button");
+    cy.get(inputSelector).as("input");
+    cy.get(circleElementSelector).as("circle");
   });
 
   it("add button disabled", () => {
-    cy.get('[data-testid="add-button"]').should("be.disabled");
-    cy.get('[data-testid="input"]').type("6");
-    cy.get('[data-testid="add-button"]').should("not.be.disabled");
-    cy.get('[data-testid="input"]').clear();
-    cy.get('[data-testid="add-button"]').should("be.disabled");
+    cy.get("@add-button").should("be.disabled");
+    cy.get("@input").type("6");
+    cy.get("@add-button").should("not.be.disabled");
+    cy.get("@input").clear();
+    cy.get("@add-button").should("be.disabled");
   });
 
   it("add element", () => {
-    cy.get('[data-testid="input"]').type("1");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("1");
+    cy.get("@add-button").click();
 
-    cy.get('[data-testid*="circle-element"]').each(($el, index) => {
+    cy.get("@circle").each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("contain", "1");
         cy.wrap($el).should("contain", "head");
         cy.wrap($el).should("contain", "tail");
         cy.wrap($el)
-          .find('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+          .find(circleStylesSelector)
+          .should("have.css", "border", changingBorder);
       }
     });
 
     cy.wait(500);
 
-    cy.get('[data-testid*="circle-element"]').each(($el, index) => {
+    cy.get("@circle").each(($el, index) => {
       if (index === 0) {
         cy.wrap($el)
-          .find('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+          .find(circleStylesSelector)
+          .should("have.css", "border", defaultBorder);
       }
     });
 
-    cy.get('[data-testid="input"]').type("2");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("2");
+    cy.get("@add-button").click();
 
-    cy.get('[data-testid*="circle-element"]').each(($el, index) => {
+    cy.get("@circle").each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("contain", "1");
         cy.wrap($el).should("contain", "head");
@@ -48,13 +63,13 @@ describe("QUEUE TEST", () => {
         cy.wrap($el).should("contain", "1");
         cy.wrap($el).should("contain", "tail");
         cy.wrap($el)
-          .find('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+          .find(circleStylesSelector)
+          .should("have.css", "border", changingBorder);
       }
     });
     cy.wait(500);
 
-    cy.get('[data-testid*="circle-element"]').each(($el, index) => {
+    cy.get("@circle").each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("contain", "1");
         cy.wrap($el).should("contain", "head");
@@ -63,29 +78,29 @@ describe("QUEUE TEST", () => {
         cy.wrap($el).should("contain", "1");
         cy.wrap($el).should("contain", "tail");
         cy.wrap($el)
-          .find('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+          .find(circleStylesSelector)
+          .should("have.css", "border", defaultBorder);
       }
     });
   });
 
   it("remove element", () => {
-    cy.get('[data-testid="input"]').type("1");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("1");
+    cy.get("@add-button").click();
     cy.wait(500);
-    cy.get('[data-testid="input"]').type("2");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("2");
+    cy.get("@add-button").click();
     cy.wait(500);
 
-    cy.get('[data-testid="delete-button"]').click();
+    cy.get(deleteButton).click();
 
-    cy.get('[data-testid*="circle-element"]').each(($el, index) => {
+    cy.get("@circle").each(($el, index) => {
       if (index === 0) {
         cy.wrap($el).should("contain", "1");
         cy.wrap($el).should("contain", "head");
         cy.wrap($el)
-          .find('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+          .find(circleStylesSelector)
+          .should("have.css", "border", changingBorder);
       }
       if (index === 1) {
         cy.wrap($el).should("contain", "1");
@@ -95,14 +110,12 @@ describe("QUEUE TEST", () => {
 
     cy.wait(500);
 
-    cy.get('[data-testid*="circle-element"]').each(($el, index) => {
+    cy.get("@circle").each(($el, index) => {
       if (index === 0) {
+        cy.wrap($el).find(circleLetterSelector).should("contain", "");
         cy.wrap($el)
-          .find('[data-testid="circle-letter"]')
-          .should("contain", "");
-        cy.wrap($el)
-          .find('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+          .find(circleStylesSelector)
+          .should("have.css", "border", defaultBorder);
       }
       if (index === 1) {
         cy.wrap($el).should("contain", "1");
@@ -113,22 +126,20 @@ describe("QUEUE TEST", () => {
   });
 
   it("clear queue", () => {
-    cy.get('[data-testid="input"]').type("1");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("1");
+    cy.get("@add-button").click();
     cy.wait(500);
-    cy.get('[data-testid="input"]').type("2");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("2");
+    cy.get("@add-button").click();
     cy.wait(500);
 
-    cy.get('[data-testid="clear-button"]').click();
+    cy.get(clearButton).click();
 
-    cy.get('[data-testid*="circle-element"]').each(($el) => {
+    cy.get("@circle").each(($el) => {
+      cy.wrap($el).find(circleLetterSelector).should("have.text", "");
       cy.wrap($el)
-        .find('[data-testid="circle-letter"]')
-        .should("have.text", "");
-      cy.wrap($el)
-        .find('[data-testid="circle_styles"]')
-        .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+        .find(circleStylesSelector)
+        .should("have.css", "border", defaultBorder);
     });
   });
 });

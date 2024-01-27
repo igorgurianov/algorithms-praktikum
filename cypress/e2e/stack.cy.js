@@ -1,97 +1,101 @@
+import {
+  circleStylesSelector,
+  containerSelector,
+  circleHeadSelector,
+  circleLetterSelector,
+  circleTailSelector,
+  changingBorder,
+  defaultBorder,
+  inputSelector,
+  addButton,
+  clearButton,
+} from "../../src/constants/testing-selectors";
+
 describe("STACK functionality", () => {
+  beforeEach(() => {
+    cy.visit("stack");
+    cy.get(containerSelector).as("container");
+    cy.get(inputSelector).as("input");
+    cy.get(addButton).as("add-button");
+    //cy.get(circleHeadSelector).as("head");
+  });
+
   it("button disabled", () => {
-    cy.visit("http://localhost:3000/stack");
-    cy.get('[data-testid="input"]').should("have.value", "");
-    cy.get('[data-testid="add-button"]').should("be.disabled");
+    cy.get("@input").should("have.value", "");
+    cy.get("@add-button").should("be.disabled");
   });
 
   it("add element", () => {
-    cy.visit("http://localhost:3000/stack");
-    cy.get('[data-testid="input"]').type("1");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("1");
+    cy.get("@add-button").click();
 
-    cy.get('[data-testid="circles-container"]')
+    cy.get("@container")
       .first()
       .within(($el) => {
-        cy.wrap($el)
-          .get('[data-testid="circle-head"]')
-          .should("have.text", "top");
+        cy.wrap($el).get(circleHeadSelector).should("have.text", "top");
+
+        cy.wrap($el).get(circleLetterSelector).should("have.text", "1");
+
+        cy.wrap($el).get(circleTailSelector).should("have.text", "0");
 
         cy.wrap($el)
-          .get('[data-testid="circle-letter"]')
-          .should("have.text", "1");
-
-        cy.wrap($el)
-          .get('[data-testid="circle-tail"]')
-          .should("have.text", "0");
-
-        cy.wrap($el)
-          .get('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+          .get(circleStylesSelector)
+          .should("have.css", "border", changingBorder);
       });
 
     cy.wait(500);
 
-    cy.get('[data-testid="circles-container"]')
+    cy.get("@container")
       .first()
       .within(($el) => {
-        cy.wrap($el)
-          .get('[data-testid="circle-head"]')
-          .should("have.text", "top");
+        cy.wrap($el).get(circleHeadSelector).should("have.text", "top");
+
+        cy.wrap($el).get(circleLetterSelector).should("have.text", "1");
+
+        cy.wrap($el).get(circleTailSelector).should("have.text", "0");
 
         cy.wrap($el)
-          .get('[data-testid="circle-letter"]')
-          .should("have.text", "1");
-
-        cy.wrap($el)
-          .get('[data-testid="circle-tail"]')
-          .should("have.text", "0");
-
-        cy.wrap($el)
-          .get('[data-testid="circle_styles"]')
-          .should("have.css", "border", "4px solid rgb(0, 50, 255)");
+          .get(circleStylesSelector)
+          .should("have.css", "border", defaultBorder);
       });
   });
 
   it("delete element", () => {
     cy.clock();
-    cy.visit("http://localhost:3000/stack");
 
-    cy.get('[data-testid="input"]').type("1");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("1");
+    cy.get("@add-button").click();
 
     cy.tick(500);
 
     cy.get('[data-testid="remove-button"]').click();
 
-    cy.get('[data-testid="circles-container"]')
+    cy.get("@container")
       .last()
-      .find('[data-testid="circle_styles"]')
-      .should("have.css", "border", "4px solid rgb(210, 82, 225)");
+      .find(circleStylesSelector)
+      .should("have.css", "border", changingBorder);
 
     cy.tick(500);
 
-    cy.get('[data-testid="circles-container"]').should("be.empty");
+    cy.get("@container").should("be.empty");
   });
 
   it("clear stack", () => {
-    cy.visit("http://localhost:3000/stack");
-
-    cy.get('[data-testid="input"]').type("1");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("1");
+    cy.get("@add-button").click();
 
     cy.wait(500);
 
-    cy.get('[data-testid="input"]').type("2");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("2");
+    cy.get("@add-button").click();
     cy.wait(500);
 
-    cy.get('[data-testid="input"]').type("3");
-    cy.get('[data-testid="add-button"]').click();
+    cy.get("@input").type("3");
+    cy.get("@add-button").click();
     cy.wait(500);
 
-    cy.get('[data-testid="clear-button"]').click();
+    cy.get(clearButton).click();
 
-    cy.get('[data-testid="circles-container"]').should("be.empty");
+    cy.get("@container").should("be.empty");
   });
 });
