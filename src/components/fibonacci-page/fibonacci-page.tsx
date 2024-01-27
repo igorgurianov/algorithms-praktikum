@@ -21,7 +21,6 @@ export const FibonacciPage: React.FC = () => {
     } else {
       setValidation(false);
     }
-    //console.log(inputNumber);
   }, [inputNumber]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,6 +43,7 @@ export const FibonacciPage: React.FC = () => {
       }
     } finally {
       SetInProgress(false);
+      setInput("");
     }
   };
 
@@ -62,24 +62,31 @@ export const FibonacciPage: React.FC = () => {
           onChange={handleInputChange}
           step="1"
           min={1}
+          data-testid="input"
         />
         <Button
           text="Рассчитать"
           extraClass="ml-6"
           onClick={handleStartAlgoritm}
           isLoader={inProgress}
-          disabled={!validation}
+          disabled={!validation || input === ""}
+          data-testid="button"
         />
       </div>
       {fibNumbers && (
         <ul
           className={`${styles.vizBox}`}
           style={fibNumbers.length > 10 ? { justifyContent: "flex-start" } : {}}
+          data-testid="circles-container"
         >
           {fibNumbers.map((item, index) => {
             return (
               <li key={index}>
-                <Circle letter={item.toString()} index={index} />
+                <Circle
+                  letter={item.toString()}
+                  index={index}
+                  data-testid="circle-item"
+                />
               </li>
             );
           })}

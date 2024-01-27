@@ -73,34 +73,44 @@ export const StringComponent: React.FC = () => {
         SetInputArray([...arr]);
         j--;
       }
+    } catch (e) {
+      console.log(e);
     } finally {
       SetInProgress(false);
+      SetInput("");
     }
   };
 
   return (
-    <SolutionLayout title="Строка">
+    <SolutionLayout title="Строка" data-testid="string-page">
       <div className={styles.setupBox}>
         <Input
           maxLength={11}
           isLimitText
           value={input}
           onChange={handleInputChange}
+          data-testid="input"
         />
         <Button
           text="Развернуть"
+          data-testid="start algo"
           extraClass="ml-6"
           onClick={handleStartAlgoritm}
           isLoader={inProgress}
+          disabled={input === "" ? true : false}
         />
       </div>
 
       {inputArray && (
-        <ul className={`${styles.vizBox} mt-40`}>
+        <ul className={`${styles.vizBox} mt-40`} data-testid="circles box">
           {inputArray.map((item, index) => {
             return (
               <li key={index}>
-                <Circle letter={item.value} state={item.state} />
+                <Circle
+                  letter={item.value}
+                  state={item.state}
+                  data-testid="circle-content"
+                />
               </li>
             );
           })}
