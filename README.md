@@ -9,14 +9,12 @@
 - [Структуру данных "Очередь"](#Очередь)
 - [Структура данных "Связный список"](#Связный-список)
 
-
+[Дизайн проекта](https://www.figma.com/file/RIkypcTQN5d37g7RRTFid0/Algososh_external_link?node-id=0%3A1)
 
 ## Технологии
 - [TypeScript](https://www.typescriptlang.org/)
 - [React](https://react.dev)
 
-
-[дизайн проекта](https://www.figma.com/file/RIkypcTQN5d37g7RRTFid0/Algososh_external_link?node-id=0%3A1)
 
 ## Тестирование
 - [Jest](https://jestjs.io)
